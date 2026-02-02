@@ -115,9 +115,9 @@ export default function Host() {
 
   if (phase === 'setup') {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-2xl mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
             ← Home
           </Button>
           <TournamentSetup onGenerate={handleGenerate} generating={generating} />
@@ -128,9 +128,9 @@ export default function Host() {
 
   if (phase === 'share' && t) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-lg mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
             ← Home
           </Button>
           <ShareCode
@@ -148,12 +148,12 @@ export default function Host() {
   if (phase === 'match' && t && t.matches[matchIndex]) {
     const match = t.matches[matchIndex]
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
-        <div className="max-w-2xl mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
+        <div className="max-w-2xl lg:max-w-5xl mx-auto">
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
             ← Home
           </Button>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="lg:col-span-2">
               <CurrentMatch
                 tournament={t}
@@ -178,9 +178,9 @@ export default function Host() {
   if (phase === 'statEntry' && t && t.matches[matchIndex]) {
     const match = t.matches[matchIndex]
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-2xl mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={handleStatBack}>
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={handleStatBack}>
             ← Back to match
           </Button>
           <StatEntry
@@ -198,9 +198,9 @@ export default function Host() {
 
   if (phase === 'summary' && t) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-lg mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
             ← Home
           </Button>
           <TournamentSummary tournament={t} className="mb-6" />

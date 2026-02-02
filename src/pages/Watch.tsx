@@ -31,9 +31,9 @@ export default function Watch() {
 
   if (!watchCode) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-md mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
             ← Home
           </Button>
           <JoinTournament onJoin={handleJoin} loading={false} error={null} />
@@ -52,9 +52,9 @@ export default function Watch() {
 
   if (error && !tournament) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+      <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-md mx-auto">
-          <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
             ← Home
           </Button>
           <JoinTournament onJoin={handleJoin} loading={false} error={error} />
@@ -66,9 +66,9 @@ export default function Watch() {
   if (!tournament) return null
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
       <div className="max-w-2xl mx-auto">
-        <Button variant="ghost" className="mb-4" onClick={() => navigate('/')}>
+        <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
           ← Home
         </Button>
         <p className="text-sm text-[var(--text-muted)] mb-4">

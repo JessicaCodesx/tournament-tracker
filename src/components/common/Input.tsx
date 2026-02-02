@@ -16,7 +16,7 @@ export default function Input({ label, error, className = '', id, ...props }: In
       )}
       <input
         id={inputId}
-        className={`w-full px-4 py-2.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent ${className}`}
+        className={`w-full min-h-[var(--touch-min)] px-4 py-3 text-base rounded-xl bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent ${className}`}
         {...props}
       />
       {error && <p className="mt-1 text-sm text-red-400">{error}</p>}

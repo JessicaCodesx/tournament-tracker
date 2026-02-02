@@ -25,12 +25,12 @@ export default function Leaderboard({ tournament, className = '' }: LeaderboardP
     })
 
   return (
-    <div className={`overflow-x-auto ${className}`}>
-      <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">Tournament Standings</h2>
-      <p className="text-sm text-[var(--text-muted)] mb-3">
+    <div className={`overflow-x-auto -mx-1 ${className}`}>
+      <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mb-1">Tournament Standings</h2>
+      <p className="text-xs sm:text-sm text-[var(--text-muted)] mb-3">
         Based on {gamesEntered} game{gamesEntered !== 1 ? 's' : ''} entered.
       </p>
-      <table className="w-full text-left text-sm">
+      <table className="w-full text-left text-sm min-w-[260px]">
         <thead>
           <tr className="border-b border-[var(--text-muted)]/30 text-[var(--text-muted)]">
             <th className="py-2 pr-2">Rank</th>

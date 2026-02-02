@@ -4,16 +4,16 @@ import Card from '../components/common/Card'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] p-4 md:p-8">
-      <div className="max-w-lg mx-auto text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">
+    <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8 max-w-lg mx-auto">
+      <div className="text-center">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">
           CoD Tournament Tracker
         </h1>
-        <p className="text-[var(--text-muted)] mb-8">
+        <p className="text-[var(--text-muted)] mb-6 sm:mb-8 text-sm sm:text-base">
           Run custom Black Ops 7 tournaments with friends. Share a code and everyone watches the leaderboard live.
         </p>
-        <Card className="mb-6">
-          <div className="space-y-4">
+        <Card className="mb-6 p-4 sm:p-6">
+          <div className="space-y-3 sm:space-y-4">
             <Link to="/host">
               <Button size="lg" fullWidth>
                 Create Tournament

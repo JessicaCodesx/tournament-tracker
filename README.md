@@ -46,7 +46,30 @@ A lightweight web app for running custom Call of Duty: Black Ops 7 tournaments w
 
 - `npm run dev` — Start dev server
 - `npm run build` — Production build
-- `npm run preview` — Preview production build
+- `npm run preview` — Preview production build (tests `dist/` with base path)
+- `npm run deploy` — Build and push `dist/` to the `gh-pages` branch (GitHub Pages)
+
+## Mobile
+
+The app is built mobile-first: touch targets are at least 44px, inputs use 16px font to avoid iOS zoom, and layout stacks on small screens. Safe-area insets are respected for notched devices. Use it on phones while the TV runs the game.
+
+## Deploy to GitHub Pages
+
+1. **Set the base path** (if needed): Local dev uses `base: '/'`. For production, `vite.config.ts` defaults to `base: '/tournament-tracker/'`. To override:
+   - **Project site** (`username.github.io/tournament-tracker`): default `base: '/tournament-tracker/'` is correct.
+   - **User site** (`username.github.io`): set `base: '/'` (or `VITE_BASE_PATH=/` when building).
+   - **Other repo name**: set `base: '/your-repo-name/'` or `VITE_BASE_PATH=/your-repo-name/`.
+
+2. **Build and deploy**:
+   ```bash
+   npm run build
+   npm run deploy
+   ```
+   Or use GitHub Actions to build and deploy on push (see [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publish-source-for-github-pages#publishing-with-a-custom-github-actions-workflow)).
+
+3. **GitHub repo settings**: In the repo → Settings → Pages → Source, choose **Deploy from a branch**, branch **gh-pages**, folder **/ (root)**.
+
+4. **Share links**: Your app will be at `https://<username>.github.io/<repo-name>/`. Share that URL and the watch path (e.g. `.../watch/CODE`) with friends.
 
 ## Project structure
 

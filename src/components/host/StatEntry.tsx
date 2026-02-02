@@ -89,28 +89,30 @@ export default function StatEntry({
         )}
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto -mx-1">
+          <table className="w-full text-sm min-w-[280px]">
             <thead>
               <tr className="border-b border-[var(--text-muted)]/30 text-[var(--text-muted)]">
-                <th className="py-2 pr-2 text-left">Player</th>
-                <th className="py-2 pr-2 text-left">Kills</th>
-                <th className="py-2 pr-2 text-left">Deaths</th>
-                <th className="py-2 text-left">Score</th>
+                <th className="py-2.5 pr-2 text-left">Player</th>
+                <th className="py-2.5 pr-2 text-left">K</th>
+                <th className="py-2.5 pr-2 text-left">D</th>
+                <th className="py-2.5 text-left">Score</th>
               </tr>
             </thead>
             <tbody>
               {playerIds.map((id) => {
                 const player = tournament.players.find((p) => p.id === id)
                 const s = stats[id] ?? { kills: 0, deaths: 0, score: 0 }
+                const inputClass = 'w-full min-w-12 min-h-[var(--touch-min)] px-2 py-2 text-base rounded-lg bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)]'
                 return (
                   <tr key={id} className="border-b border-[var(--text-muted)]/10">
-                    <td className="py-2 pr-2">{player?.name ?? id}</td>
+                    <td className="py-2 pr-2 font-medium">{player?.name ?? id}</td>
                     <td className="py-2 pr-2">
                       <input
                         type="number"
+                        inputMode="numeric"
                         min={0}
-                        className="w-16 px-2 py-1 rounded bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)]"
+                        className={inputClass}
                         value={s.kills}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateStat(id, 'kills', parseInt(e.target.value, 10) || 0)}
                       />
@@ -118,8 +120,9 @@ export default function StatEntry({
                     <td className="py-2 pr-2">
                       <input
                         type="number"
+                        inputMode="numeric"
                         min={0}
-                        className="w-16 px-2 py-1 rounded bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)]"
+                        className={inputClass}
                         value={s.deaths}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateStat(id, 'deaths', parseInt(e.target.value, 10) || 0)}
                       />
@@ -127,8 +130,9 @@ export default function StatEntry({
                     <td className="py-2">
                       <input
                         type="number"
+                        inputMode="numeric"
                         min={0}
-                        className="w-20 px-2 py-1 rounded bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)]"
+                        className={inputClass}
                         value={s.score}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateStat(id, 'score', parseInt(e.target.value, 10) || 0)}
                       />
@@ -139,7 +143,7 @@ export default function StatEntry({
             </tbody>
           </table>
         </div>
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap gap-3 mt-5">
           <Button type="button" variant="secondary" onClick={onBack}>
             Back
           </Button>
