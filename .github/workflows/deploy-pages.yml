@@ -1,17 +1,14 @@
-# Build and push to gh-pages on every push to main.
+# Deploy to gh-pages (disabled: GitHub runners often queue forever).
+# To update the live site, run from your machine:  npm run deploy
 # Repo Settings → Pages → Source = "Deploy from a branch", Branch = gh-pages, Folder = / (root)
-# Repo Settings → Secrets → Add all VITE_FIREBASE_* (see SETUP_AND_DEPLOY.md)
 
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch:   # manual only; push trigger removed to avoid endless queue
 
 permissions:
-  contents: read
-  contents: write   # push to gh-pages
+  contents: write   # read + write (needed to push to gh-pages)
 
 jobs:
   build-and-deploy:
