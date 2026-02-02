@@ -6,9 +6,8 @@ export default function Home() {
   return (
     <div className="min-h-screen px-4 py-8 sm:py-12 md:py-16 max-w-lg mx-auto">
       <div className="text-center">
-        <p className="section-label mb-3 text-[var(--accent)]">CoD Black Ops 7</p>
         <h1 className="text-display text-3xl sm:text-4xl md:text-5xl text-[var(--text-primary)] mb-4">
-          Tournament Tracker
+          Sinful Gaming Tournament Tracker
         </h1>
         <p className="text-[var(--text-secondary)] mb-8 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
           Run custom tournaments with friends. Share a code and everyone watches the leaderboard live.
