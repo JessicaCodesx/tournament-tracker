@@ -1,10 +1,11 @@
 /**
- * Read-only spectator view: leaderboard, current match, progress.
+ * Read-only spectator view: leaderboard, current match, progress, player stats.
  */
 import Card from '../common/Card'
 import Leaderboard from '../shared/Leaderboard'
 import CurrentMatchDisplay from '../shared/CurrentMatchDisplay'
 import ProgressBar from '../shared/ProgressBar'
+import PlayerStats from '../shared/PlayerStats'
 import type { Tournament } from '../../types/tournament'
 
 interface SpectatorDashboardProps {
@@ -30,6 +31,11 @@ export default function SpectatorDashboard({ tournament, className = '' }: Spect
         <Card>
           <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">Current Match</h2>
           <CurrentMatchDisplay tournament={tournament} match={currentMatch} />
+        </Card>
+      )}
+      {completedCount > 0 && (
+        <Card>
+          <PlayerStats tournament={tournament} />
         </Card>
       )}
     </div>

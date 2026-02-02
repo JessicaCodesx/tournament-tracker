@@ -1,5 +1,5 @@
 /**
- * Post-creation screen: shareable code, copy code/link, Start Tournament.
+ * Post-creation screen: shareable code, copy/link, shuffle maps & modes, Start Tournament.
  */
 import { useCallback, useState } from 'react'
 import Button from '../common/Button'
@@ -7,10 +7,13 @@ import Card from '../common/Card'
 
 interface ShareCodeProps {
   code: string
+  matchCount: number
   onStart: () => void
+  onShuffleMapsModes?: () => void
+  shuffling?: boolean
 }
 
-export default function ShareCode({ code, onStart }: ShareCodeProps) {
+export default function ShareCode({ code, matchCount, onStart, onShuffleMapsModes, shuffling }: ShareCodeProps) {
   const [copied, setCopied] = useState<'code' | 'link' | null>(null)
 
   const watchUrl = typeof window !== 'undefined' ? `${window.location.origin}/watch/${code}` : ''
@@ -45,6 +48,16 @@ export default function ShareCode({ code, onStart }: ShareCodeProps) {
       <p className="text-sm text-[var(--text-muted)] mb-4">
         Friends can watch at: {watchUrl}
       </p>
+      {onShuffleMapsModes && (
+        <Button
+          variant="secondary"
+          className="mb-4"
+          onClick={onShuffleMapsModes}
+          disabled={shuffling}
+        >
+          {shuffling ? 'Shuffling…' : `Shuffle maps & modes (${matchCount} matches)`}
+        </Button>
+      )}
       <Button size="lg" fullWidth onClick={onStart}>
         Start Tournament
       </Button>

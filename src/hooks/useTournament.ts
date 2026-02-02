@@ -2,7 +2,7 @@
  * Tournament operations: create, load, submit match results.
  */
 import { useCallback } from 'react'
-import { createTournament as createTournamentDb, getTournament as getTournamentDb, updateMatchesAndLeaderboard } from '../services/tournamentService'
+import { createTournament as createTournamentDb, getTournament as getTournamentDb, updateTournament as updateTournamentDb, updateMatchesAndLeaderboard } from '../services/tournamentService'
 import { generateTournamentCode } from '../utils/codeGenerator'
 import { generateMatchups } from '../utils/teamGenerator'
 import { assignMapsAndModes } from '../utils/mapModeSelector'
@@ -71,6 +71,19 @@ export function useTournamentActions() {
     return getTournamentDb(code.toUpperCase())
   }, [])
 
+  const regenerateMapsAndModes = useCallback(async (tournamentCode: string): Promise<Tournament | null> => {
+    const t = await getTournamentDb(tournamentCode)
+    if (!t) return null
+    const mapModes = assignMapsAndModes(t.matches.length)
+    const matches = t.matches.map((m, i) => ({
+      ...m,
+      map: mapModes[i].map,
+      mode: mapModes[i].mode,
+    }))
+    await updateTournamentDb(tournamentCode, { matches })
+    return { ...t, matches }
+  }, [])
+
   const submitMatchResults = useCallback(
     async (
       tournamentCode: string,
@@ -101,5 +114,5 @@ export function useTournamentActions() {
     []
   )
 
-  return { createTournament, loadTournament, submitMatchResults }
+  return { createTournament, loadTournament, submitMatchResults, regenerateMapsAndModes }
 }

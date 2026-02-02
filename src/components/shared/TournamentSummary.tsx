@@ -1,6 +1,7 @@
 /**
- * Final tournament summary: champion, standings, MVP stats.
+ * Final tournament summary: champion, standings, player stats, share link.
  */
+import PlayerStats from './PlayerStats'
 import type { Tournament, LeaderboardEntry } from '../../types/tournament'
 
 interface TournamentSummaryProps {
@@ -39,6 +40,9 @@ export default function TournamentSummary({ tournament, className = '' }: Tourna
       <div className="mb-4 text-sm text-[var(--text-muted)]">
         <p>Tournament Code: <strong className="text-[var(--text-primary)]">{code}</strong></p>
         <p>View anytime: {watchUrl}</p>
+      </div>
+      <div className="mt-6 pt-4 border-t border-[var(--text-muted)]/20">
+        <PlayerStats tournament={tournament} />
       </div>
     </div>
   )

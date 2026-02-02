@@ -1,5 +1,5 @@
 /**
- * Live standings table: rank, player, wins, losses, W%, avg K/D.
+ * Live standings table: rank, player, wins, losses, W%, avg K/D. Based on games entered.
  */
 import type { Tournament, LeaderboardEntry } from '../../types/tournament'
 
@@ -10,6 +10,7 @@ interface LeaderboardProps {
 
 export default function Leaderboard({ tournament, className = '' }: LeaderboardProps) {
   const { players, leaderboard } = tournament
+  const gamesEntered = tournament.matches.filter((m) => m.status === 'completed').length
   const entries = players
     .map((p) => ({
       player: p,
@@ -25,7 +26,10 @@ export default function Leaderboard({ tournament, className = '' }: LeaderboardP
 
   return (
     <div className={`overflow-x-auto ${className}`}>
-      <h2 className="text-lg font-bold text-[var(--text-primary)] mb-3">Tournament Standings</h2>
+      <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">Tournament Standings</h2>
+      <p className="text-sm text-[var(--text-muted)] mb-3">
+        Based on {gamesEntered} game{gamesEntered !== 1 ? 's' : ''} entered.
+      </p>
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-[var(--text-muted)]/30 text-[var(--text-muted)]">
@@ -33,6 +37,7 @@ export default function Leaderboard({ tournament, className = '' }: LeaderboardP
             <th className="py-2 pr-2">Player</th>
             <th className="py-2 pr-2">W</th>
             <th className="py-2 pr-2">L</th>
+            <th className="py-2 pr-2">Games</th>
             <th className="py-2 pr-2">W%</th>
             <th className="py-2">Avg K/D</th>
           </tr>
@@ -46,6 +51,7 @@ export default function Leaderboard({ tournament, className = '' }: LeaderboardP
                 <td className="py-2 pr-2">{player.name}</td>
                 <td className="py-2 pr-2">{entry.wins}</td>
                 <td className="py-2 pr-2">{entry.losses}</td>
+                <td className="py-2 pr-2">{entry.gamesPlayed}</td>
                 <td className="py-2 pr-2">{winPct}%</td>
                 <td className="py-2">{entry.kdRatio.toFixed(2)}</td>
               </tr>
