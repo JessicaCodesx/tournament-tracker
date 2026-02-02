@@ -1,6 +1,6 @@
-# Build and deploy to GitHub Pages when pushing to main.
-# Requires: Repo Settings → Pages → Source = "GitHub Actions"
-# Requires: Repo Settings → Secrets → Add all VITE_FIREBASE_* secrets (see SETUP_AND_DEPLOY.md)
+# Build and push to gh-pages on every push to main.
+# Repo Settings → Pages → Source = "Deploy from a branch", Branch = gh-pages, Folder = / (root)
+# Repo Settings → Secrets → Add all VITE_FIREBASE_* (see SETUP_AND_DEPLOY.md)
 
 name: Deploy to GitHub Pages
 
@@ -11,15 +11,10 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
+  contents: write   # push to gh-pages
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -46,21 +41,9 @@ jobs:
           VITE_BASE_PATH: ${{ format('/{0}/', github.event.repository.name) }}
         run: npm run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: ''   # leave empty for username.github.io/repo-name

@@ -69,13 +69,15 @@ To have the site **deploy automatically when you push to main** (no need to run 
      - `VITE_FIREBASE_MESSAGING_SENDER_ID`
      - `VITE_FIREBASE_APP_ID`
 
-2. **Switch Pages to GitHub Actions**
+2. **Set Pages to deploy from the gh-pages branch**
    - Repo → **Settings** → **Pages**.
-   - Under **Build and deployment**, **Source**: choose **GitHub Actions** (not “Deploy from a branch”).
+   - Under **Build and deployment**: **Source** = **Deploy from a branch**.
+   - **Branch**: `gh-pages`, **Folder**: `/ (root)`. Save.
+   - (The workflow pushes the built site to `gh-pages`; Pages serves from that branch.)
 
 3. **Push to main**
    - Push your code (including the `.github/workflows/deploy-pages.yml` file) to `main`.
-   - The workflow runs: it builds using the secrets and deploys to Pages. The site updates in a few minutes.
+   - The workflow runs: it builds using the secrets and pushes the built files to the `gh-pages` branch. The site updates in a few minutes.
 
 After this, every **push to main** triggers a new deploy. You can also run the workflow manually from the **Actions** tab → **Deploy to GitHub Pages** → **Run workflow**.
 
