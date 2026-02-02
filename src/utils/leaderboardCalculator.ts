@@ -1,5 +1,5 @@
 /**
- * Recomputes leaderboard from match results (wins, losses, K/D, avg score).
+ * Recomputes leaderboard from match results (wins, losses, K/D, avg score, plants/defuses for S&D).
  */
 import type { Match, LeaderboardEntry } from '../types/tournament'
 
@@ -29,6 +29,12 @@ export function calculateLeaderboard(
       entries[pid].gamesPlayed += 1
       entries[pid].totalKills += stat.kills
       entries[pid].totalDeaths += stat.deaths
+      if (stat.plants != null) {
+        entries[pid].totalPlants = (entries[pid].totalPlants ?? 0) + stat.plants
+      }
+      if (stat.defuses != null) {
+        entries[pid].totalDefuses = (entries[pid].totalDefuses ?? 0) + stat.defuses
+      }
       if (winnerSet.has(pid)) entries[pid].wins += 1
       else entries[pid].losses += 1
     }

@@ -21,19 +21,27 @@ export default function MatchHistory({ tournament, className = '' }: MatchHistor
   if (completed.length === 0) return null
 
   return (
-    <Card className={className}>
-      <h2 className="text-lg font-bold text-[var(--text-primary)] mb-3">Match History</h2>
-      <ul className="space-y-2 text-sm">
+    <Card elevated className={className}>
+      <h2 className="text-title text-base text-[var(--text-primary)] mb-1">Match history</h2>
+      <p className="text-caption mb-4">
+        {completed.length} game{completed.length !== 1 ? 's' : ''} completed.
+      </p>
+      <ul className="space-y-2.5">
         {completed.map((m) => (
-          <li key={m.id} className="flex flex-wrap items-center gap-2 text-[var(--text-muted)]">
-            <span className="font-medium text-[var(--text-primary)]">Match {m.matchNumber}:</span>
-            <span>{m.mode} — {m.map}</span>
-            <span>
+          <li
+            key={m.id}
+            className="flex flex-wrap items-center gap-2 py-2.5 border-b border-[var(--border-subtle)] last:border-0 text-sm"
+          >
+            <span className="font-semibold text-[var(--text-secondary)]">Match {m.matchNumber}</span>
+            <span className="text-[var(--text-muted)]">—</span>
+            <span className="text-[var(--text-primary)]">{m.mode} · {m.map}</span>
+            <span className="text-[var(--text-muted)] hidden sm:inline">·</span>
+            <span className="text-[var(--text-secondary)]">
               {teamNames(tournament, m.team1)} vs {teamNames(tournament, m.team2)}
               {m.team3 ? ` vs ${teamNames(tournament, m.team3)}` : ''}
             </span>
             {m.winner && (
-              <span className="text-[var(--accent)]">
+              <span className="font-medium text-[var(--accent)]">
                 Winner: Team {m.winner.replace('team', '')}
               </span>
             )}

@@ -7,7 +7,7 @@ export const CDL_MODES = ['Hardpoint', 'Search & Destroy', 'Control'] as const
 export type CDLMode = (typeof CDL_MODES)[number]
 
 export const CDL_MAPS_BY_MODE: Record<CDLMode, readonly string[]> = {
-  'Hardpoint': ['Babylon', 'Protocol', 'Skyline', 'Red Card'],
-  'Search & Destroy': ['Hacienda', 'Skyline', 'Babylon', 'Warhead'],
-  'Control': ['Highrise', 'Babylon', 'Protocol'],
+  'Hardpoint': ['Blackheart', 'Colossus', 'Den', 'Exposure', 'Scar'],
+  'Search & Destroy': ['Colossus', 'Den', 'Exposure', 'Raid', 'Scar Overload', 'Scar'],
+  'Control': ['Blackheart', 'Colossus', 'Den', 'Exposure', 'Scar'],
 }

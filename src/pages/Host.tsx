@@ -15,9 +15,9 @@ import StatEntry from '../components/host/StatEntry'
 import Leaderboard from '../components/shared/Leaderboard'
 import PlayerStats from '../components/shared/PlayerStats'
 import TournamentSummary from '../components/shared/TournamentSummary'
+import BracketView from '../components/shared/BracketView'
 import Button from '../components/common/Button'
-import type { TournamentFormat } from '../types/tournament'
-import type { Player } from '../types/tournament'
+import type { TournamentFormat, Player, MatchStat } from '../types/tournament'
 
 type Phase = 'setup' | 'share' | 'match' | 'statEntry' | 'summary'
 
@@ -84,7 +84,7 @@ export default function Host() {
 
   const handleStatSubmit = async (
     winner: 'team1' | 'team2' | 'team3',
-    stats: Record<string, { kills: number; deaths: number; score?: number }>
+    stats: Record<string, MatchStat>
   ) => {
     if (!code) return
     setSubmitting(true)
@@ -117,9 +117,9 @@ export default function Host() {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-2xl mx-auto">
-          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
+          <button type="button" onClick={() => navigate('/')} className="back-link mb-5">
             ← Home
-          </Button>
+          </button>
           <TournamentSetup onGenerate={handleGenerate} generating={generating} />
         </div>
       </div>
@@ -130,9 +130,9 @@ export default function Host() {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-lg mx-auto">
-          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
+          <button type="button" onClick={() => navigate('/')} className="back-link mb-5">
             ← Home
-          </Button>
+          </button>
           <ShareCode
             code={t.code}
             matchCount={t.matches.length}
@@ -149,10 +149,13 @@ export default function Host() {
     const match = t.matches[matchIndex]
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
-        <div className="max-w-2xl lg:max-w-5xl mx-auto">
-          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
+        <div className="max-w-6xl mx-auto">
+          <button type="button" onClick={() => navigate('/')} className="back-link mb-5">
             ← Home
-          </Button>
+          </button>
+          <div className="mb-8">
+            <BracketView tournament={t} currentMatchIndex={matchIndex} />
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="lg:col-span-2">
               <CurrentMatch
@@ -180,9 +183,9 @@ export default function Host() {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
         <div className="max-w-2xl mx-auto">
-          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={handleStatBack}>
+          <button type="button" onClick={handleStatBack} className="back-link mb-5">
             ← Back to match
-          </Button>
+          </button>
           <StatEntry
             tournament={t}
             match={match}
@@ -199,19 +202,24 @@ export default function Host() {
   if (phase === 'summary' && t) {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8">
-        <div className="max-w-lg mx-auto">
-          <Button variant="ghost" className="mb-4 min-h-0 py-2" onClick={() => navigate('/')}>
+        <div className="max-w-6xl mx-auto">
+          <button type="button" onClick={() => navigate('/')} className="back-link mb-5">
             ← Home
-          </Button>
-          <TournamentSummary tournament={t} className="mb-6" />
-          <p className="text-sm text-[var(--text-muted)] mb-4">
-            Clear the tournament below to run a new one from scratch.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={handleNewTournament}>Clear & start new tournament</Button>
-            <Button variant="secondary" onClick={handleViewResults}>
-              View / Share Results
-            </Button>
+          </button>
+          <div className="mb-8">
+            <BracketView tournament={t} />
+          </div>
+          <div className="max-w-lg min-w-0">
+            <TournamentSummary tournament={t} className="mb-6" />
+            <p className="text-caption mb-4">
+              Clear the tournament below to run a new one from scratch.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={handleNewTournament}>Clear & start new tournament</Button>
+              <Button variant="secondary" onClick={handleViewResults}>
+                View / Share Results
+              </Button>
+            </div>
           </div>
         </div>
       </div>

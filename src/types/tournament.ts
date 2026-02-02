@@ -11,6 +11,15 @@ export interface Player {
 
 export type MatchStatus = 'pending' | 'in-progress' | 'completed'
 
+/** Per-player stats for a match. Fields vary by mode (S&D: plants/defuses; HP/Control: score). */
+export interface MatchStat {
+  kills: number
+  deaths: number
+  score?: number
+  plants?: number
+  defuses?: number
+}
+
 export interface Match {
   id: string
   matchNumber: number
@@ -21,7 +30,7 @@ export interface Match {
   mode: string
   status: MatchStatus
   winner: 'team1' | 'team2' | 'team3' | null
-  stats: Record<string, { kills: number; deaths: number; score?: number }>
+  stats: Record<string, MatchStat>
   timestamp?: string
 }
 
@@ -33,6 +42,8 @@ export interface LeaderboardEntry {
   kdRatio: number
   avgScore: number
   gamesPlayed: number
+  totalPlants?: number
+  totalDefuses?: number
 }
 
 export type TournamentStatus = 'setup' | 'in-progress' | 'completed'

@@ -23,10 +23,11 @@ export default function JoinTournament({ onJoin, loading, error }: JoinTournamen
   }
 
   return (
-    <Card>
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">Watch Tournament</h2>
-      <p className="text-[var(--text-muted)] mb-4">
-        Enter the tournament code to view the live leaderboard and match info.
+    <Card elevated>
+      <p className="section-label text-[var(--accent)] mb-1">Spectator</p>
+      <h2 className="text-title text-xl text-[var(--text-primary)] mb-2">Watch tournament</h2>
+      <p className="text-caption mb-5">
+        Enter a code to watch a live tournament or view past results. Codes work anytime.
       </p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
@@ -35,9 +36,9 @@ export default function JoinTournament({ onJoin, loading, error }: JoinTournamen
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase().slice(0, 6))}
           maxLength={6}
-          className="font-mono uppercase"
+          className="font-mono uppercase tracking-wider"
         />
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-amber-400/90">{error}</p>}
         <Button type="submit" fullWidth size="lg" disabled={loading || !code.trim()}>
           {loading ? 'Loading…' : 'Watch Tournament'}
         </Button>

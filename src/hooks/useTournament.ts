@@ -8,7 +8,7 @@ import { generateMatchups } from '../utils/teamGenerator'
 import { assignMapsAndModes } from '../utils/mapModeSelector'
 import { calculateLeaderboard } from '../utils/leaderboardCalculator'
 import { setCurrentTournamentCode, addRecentTournament } from '../utils/storage'
-import type { Tournament, Player, TournamentFormat, Match } from '../types/tournament'
+import type { Tournament, Player, TournamentFormat, Match, MatchStat } from '../types/tournament'
 
 export function useTournamentActions() {
   const createTournament = useCallback(
@@ -17,18 +17,21 @@ export function useTournamentActions() {
       const playerIds = players.map((p) => p.id)
       const matchups = generateMatchups(playerIds, format)
       const mapModes = assignMapsAndModes(matchups.length)
-      const matches = matchups.map(([team1, team2, team3], i): Match => ({
-        id: `m${i + 1}`,
-        matchNumber: i + 1,
-        team1,
-        team2,
-        team3,
-        map: mapModes[i].map,
-        mode: mapModes[i].mode,
-        status: 'pending',
-        winner: null,
-        stats: {},
-      }))
+      const matches = matchups.map(([team1, team2, team3], i): Match => {
+        const match: Match = {
+          id: `m${i + 1}`,
+          matchNumber: i + 1,
+          team1,
+          team2,
+          map: mapModes[i].map,
+          mode: mapModes[i].mode,
+          status: 'pending',
+          winner: null,
+          stats: {},
+        }
+        if (team3 !== undefined) match.team3 = team3
+        return match
+      })
       const allPlayerIds = playerIds
       const leaderboard = Object.fromEntries(
         allPlayerIds.map((id) => [
@@ -89,7 +92,7 @@ export function useTournamentActions() {
       tournamentCode: string,
       matchIndex: number,
       winner: 'team1' | 'team2' | 'team3',
-      stats: Record<string, { kills: number; deaths: number; score?: number }>
+      stats: Record<string, MatchStat>
     ): Promise<Tournament | null> => {
       const t = await getTournamentDb(tournamentCode)
       if (!t) return null

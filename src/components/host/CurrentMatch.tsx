@@ -25,13 +25,14 @@ export default function CurrentMatch({
   const total = tournament.matches.length
 
   return (
-    <Card>
-      <ProgressBar current={matchIndex + 1} total={total} className="mb-4" />
-      <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+    <Card elevated>
+      <ProgressBar current={matchIndex + 1} total={total} className="mb-5" />
+      <p className="section-label text-[var(--text-secondary)] mb-1">Current match</p>
+      <h2 className="text-title text-lg text-[var(--text-primary)] mb-4">
         Match {match.matchNumber} of {total}
       </h2>
-      <CurrentMatchDisplay tournament={tournament} match={match} className="mb-4" />
-      <div className="flex flex-wrap gap-2">
+      <CurrentMatchDisplay tournament={tournament} match={match} className="mb-5" />
+      <div className="flex flex-wrap gap-3">
         {match.status === 'pending' && (
           <Button onClick={onStartMatch}>Start Match</Button>
         )}

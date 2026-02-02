@@ -39,8 +39,9 @@ export default function TournamentSetup({ onGenerate, generating }: TournamentSe
   }
 
   return (
-    <Card>
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Tournament Setup</h2>
+    <Card elevated>
+      <p className="section-label text-[var(--accent)] mb-1">New tournament</p>
+      <h2 className="text-title text-xl text-[var(--text-primary)] mb-4">Setup</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {PLAYER_IDS.map((id) => (
@@ -55,17 +56,17 @@ export default function TournamentSetup({ onGenerate, generating }: TournamentSe
           ))}
         </div>
         <div>
-          <label className="block text-sm font-medium text-[var(--text-muted)] mb-2">Format</label>
+          <label className="section-label block mb-2 text-[var(--text-secondary)]">Format</label>
           <select
             value={format}
             onChange={(e) => setFormat(e.target.value as TournamentFormat)}
-            className="w-full px-4 py-2.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+            className="w-full min-h-[var(--touch-min)] px-4 py-3 text-base rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)] transition-colors duration-[var(--transition-fast)]"
           >
             <option value="3v3">3v3 (2 teams of 3)</option>
             <option value="2v2v2">2v2v2 (3 teams of 2)</option>
           </select>
         </div>
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-amber-400/90">{error}</p>}
         <Button type="submit" fullWidth size="lg" disabled={generating}>
           {generating ? 'Generating…' : 'Generate Tournament'}
         </Button>

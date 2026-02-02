@@ -4,16 +4,17 @@ import Card from '../components/common/Card'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-5 sm:p-6 md:p-8 max-w-lg mx-auto">
+    <div className="min-h-screen px-4 py-8 sm:py-12 md:py-16 max-w-lg mx-auto">
       <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">
-          CoD Tournament Tracker
+        <p className="section-label mb-3 text-[var(--accent)]">CoD Black Ops 7</p>
+        <h1 className="text-display text-3xl sm:text-4xl md:text-5xl text-[var(--text-primary)] mb-4">
+          Tournament Tracker
         </h1>
-        <p className="text-[var(--text-muted)] mb-6 sm:mb-8 text-sm sm:text-base">
-          Run custom Black Ops 7 tournaments with friends. Share a code and everyone watches the leaderboard live.
+        <p className="text-[var(--text-secondary)] mb-8 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+          Run custom tournaments with friends. Share a code and everyone watches the leaderboard live.
         </p>
-        <Card className="mb-6 p-4 sm:p-6">
-          <div className="space-y-3 sm:space-y-4">
+        <Card className="mb-6" elevated>
+          <div className="space-y-3">
             <Link to="/host">
               <Button size="lg" fullWidth>
                 Create Tournament
@@ -21,13 +22,23 @@ export default function Home() {
             </Link>
             <Link to="/watch">
               <Button variant="secondary" size="lg" fullWidth>
-                Watch Tournament
+                Watch live or view past
               </Button>
             </Link>
           </div>
         </Card>
-        <p className="text-sm text-[var(--text-muted)]">
-          Enter 6 players, choose 3v3 or 2v2v2, then share the code so friends can follow along.
+        <Card className="mb-8">
+          <p className="text-caption mb-3">
+            Have two tournament codes? Compare the same players’ stats across different days.
+          </p>
+          <Link to="/compare">
+            <Button variant="secondary" fullWidth>
+              Compare two tournaments
+            </Button>
+          </Link>
+        </Card>
+        <p className="text-caption">
+          Enter 6 players, choose 3v3 or 2v2v2, then share the code. Revisit any tournament later with its code.
         </p>
       </div>
     </div>

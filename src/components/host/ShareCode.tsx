@@ -31,27 +31,32 @@ export default function ShareCode({ code, matchCount, onStart, onShuffleMapsMode
   }, [watchUrl])
 
   return (
-    <Card>
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">Tournament Created</h2>
-      <p className="text-[var(--text-muted)] mb-4">Share this code with friends so they can watch live.</p>
-      <div className="bg-[var(--bg-primary)] rounded-lg border border-[var(--text-muted)]/30 p-6 mb-4 text-center">
-        <p className="text-3xl font-mono font-bold tracking-widest text-[var(--accent)]">{code}</p>
+    <Card elevated>
+      <p className="section-label text-[var(--accent)] mb-1">Tournament created</p>
+      <h2 className="text-title text-xl text-[var(--text-primary)] mb-2">Share this code</h2>
+      <p className="text-caption mb-6">
+        Friends can watch the leaderboard and match info live.
+      </p>
+      <div className="rounded-[var(--radius-md)] border border-[var(--border-default)] bg-[var(--bg-elevated)] p-6 mb-6 text-center ring-1 ring-[var(--accent)]/20 shadow-[var(--shadow-glow)]">
+        <p className="text-3xl sm:text-4xl font-bold font-mono tracking-[0.35em] text-[var(--accent)] tabular-nums">
+          {code}
+        </p>
       </div>
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-3 mb-6">
         <Button variant="secondary" onClick={copyCode}>
           {copied === 'code' ? 'Copied!' : 'Copy Code'}
         </Button>
         <Button variant="secondary" onClick={copyLink}>
-          {copied === 'link' ? 'Copied!' : 'Copy Full Link'}
+          {copied === 'link' ? 'Copied!' : 'Copy Link'}
         </Button>
       </div>
-      <p className="text-sm text-[var(--text-muted)] mb-4">
-        Friends can watch at: {watchUrl}
+      <p className="text-caption mb-6 break-all">
+        Watch URL: <span className="text-[var(--text-secondary)]">{watchUrl}</span>
       </p>
       {onShuffleMapsModes && (
         <Button
           variant="secondary"
-          className="mb-4"
+          className="mb-4 w-full sm:w-auto"
           onClick={onShuffleMapsModes}
           disabled={shuffling}
         >

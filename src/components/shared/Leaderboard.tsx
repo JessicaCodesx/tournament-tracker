@@ -24,36 +24,61 @@ export default function Leaderboard({ tournament, className = '' }: LeaderboardP
       return b.entry.kdRatio - a.entry.kdRatio
     })
 
+  const showPlants = entries.some((e) => (e.entry.totalPlants ?? 0) > 0)
+  const showDefuses = entries.some((e) => (e.entry.totalDefuses ?? 0) > 0)
+
   return (
     <div className={`overflow-x-auto -mx-1 ${className}`}>
-      <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mb-1">Tournament Standings</h2>
-      <p className="text-xs sm:text-sm text-[var(--text-muted)] mb-3">
+      <h2 className="text-title text-base sm:text-lg text-[var(--text-primary)] mb-1">
+        Tournament Standings
+      </h2>
+      <p className="text-caption mb-4">
         Based on {gamesEntered} game{gamesEntered !== 1 ? 's' : ''} entered.
       </p>
       <table className="w-full text-left text-sm min-w-[260px]">
         <thead>
-          <tr className="border-b border-[var(--text-muted)]/30 text-[var(--text-muted)]">
-            <th className="py-2 pr-2">Rank</th>
-            <th className="py-2 pr-2">Player</th>
-            <th className="py-2 pr-2">W</th>
-            <th className="py-2 pr-2">L</th>
-            <th className="py-2 pr-2">Games</th>
-            <th className="py-2 pr-2">W%</th>
-            <th className="py-2">Avg K/D</th>
+          <tr className="border-b border-[var(--border-default)]">
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">Rank</th>
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">Player</th>
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">W</th>
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">L</th>
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">Games</th>
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">W%</th>
+            <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">K/D</th>
+            {showPlants && <th className="section-label py-3 pr-3 font-medium text-[var(--text-muted)]">Plants</th>}
+            {showDefuses && <th className="section-label py-3 font-medium text-[var(--text-muted)]">Defuses</th>}
           </tr>
         </thead>
         <tbody>
           {entries.map(({ player, entry }, i) => {
             const winPct = entry.gamesPlayed > 0 ? Math.round((entry.wins / entry.gamesPlayed) * 100) : 0
+            const isTop = i < 3
             return (
-              <tr key={player.id} className="border-b border-[var(--text-muted)]/10">
-                <td className="py-2 pr-2 font-medium">{i + 1}</td>
-                <td className="py-2 pr-2">{player.name}</td>
-                <td className="py-2 pr-2">{entry.wins}</td>
-                <td className="py-2 pr-2">{entry.losses}</td>
-                <td className="py-2 pr-2">{entry.gamesPlayed}</td>
-                <td className="py-2 pr-2">{winPct}%</td>
-                <td className="py-2">{entry.kdRatio.toFixed(2)}</td>
+              <tr
+                key={player.id}
+                className={`border-b border-[var(--border-subtle)] transition-colors duration-[var(--transition-fast)] ${
+                  isTop ? 'bg-[var(--accent-muted)]/30' : 'hover:bg-[var(--bg-card-hover)]'
+                }`}
+              >
+                <td className="py-3 pr-3 font-semibold text-[var(--text-secondary)]">{i + 1}</td>
+                <td className="py-3 pr-3 font-medium text-[var(--text-primary)]">{player.name}</td>
+                <td className="py-3 pr-3 text-[var(--text-secondary)]">{entry.wins}</td>
+                <td className="py-3 pr-3 text-[var(--text-secondary)]">{entry.losses}</td>
+                <td className="py-3 pr-3 text-[var(--text-secondary)]">{entry.gamesPlayed}</td>
+                <td className="py-3 pr-3 text-[var(--text-secondary)]">{winPct}%</td>
+                <td className="py-3 pr-3 font-medium tabular-nums text-[var(--text-primary)]">
+                  {entry.kdRatio.toFixed(2)}
+                </td>
+                {showPlants && (
+                  <td className="py-3 pr-3 tabular-nums text-[var(--text-secondary)]">
+                    {entry.totalPlants ?? '—'}
+                  </td>
+                )}
+                {showDefuses && (
+                  <td className="py-3 tabular-nums text-[var(--text-secondary)]">
+                    {entry.totalDefuses ?? '—'}
+                  </td>
+                )}
               </tr>
             )
           })}

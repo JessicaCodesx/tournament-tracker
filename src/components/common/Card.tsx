@@ -2,12 +2,13 @@ import type { HTMLAttributes, ReactNode } from 'react'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode
+  elevated?: boolean
 }
 
-export default function Card({ children, className = '', ...props }: CardProps) {
+export default function Card({ children, className = '', elevated, ...props }: CardProps) {
   return (
     <div
-      className={`rounded-xl bg-[var(--bg-card)] border border-[var(--text-muted)]/20 p-4 sm:p-6 ${className}`}
+      className={`rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-card)] p-4 sm:p-6 shadow-[var(--shadow-card)] transition-shadow duration-[var(--transition-normal)] min-w-0 overflow-hidden ${elevated ? 'shadow-[var(--shadow-card-hover)]' : ''} ${className}`}
       {...props}
     >
       {children}

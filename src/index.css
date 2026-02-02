@@ -1,18 +1,48 @@
 @import "tailwindcss";
 
-/* BO7-inspired dark theme base */
+/* Design system: sleek dark theme */
 :root {
-  --bg-primary: #0a0e14;
-  --bg-card: #1a1f2e;
-  --accent: #ff6b35;
-  --accent-hover: #e55a2b;
-  --text-primary: #f0f2f5;
-  --text-muted: #8b95a5;
+  /* Surfaces */
+  --bg-primary: #08090d;
+  --bg-elevated: #0e1015;
+  --bg-card: #111318;
+  --bg-card-hover: #161a22;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Accent */
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-muted: rgba(249, 115, 22, 0.2);
+  --accent-glow: rgba(249, 115, 22, 0.35);
+
+  /* Text */
+  --text-primary: #f4f5f7;
+  --text-secondary: #a1a8b3;
+  --text-muted: #6b7280;
+
+  /* Touch & safe area */
   --touch-min: 44px;
   --safe-top: env(safe-area-inset-top, 0);
   --safe-bottom: env(safe-area-inset-bottom, 0);
   --safe-left: env(safe-area-inset-left, 0);
   --safe-right: env(safe-area-inset-right, 0);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 24px var(--accent-glow);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
 }
 
 html {
@@ -28,13 +58,93 @@ body {
   padding-bottom: var(--safe-bottom);
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(249, 115, 22, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 50%, rgba(249, 115, 22, 0.04), transparent),
+    radial-gradient(ellipse 60% 40% at 0% 50%, rgba(249, 115, 22, 0.04), transparent);
   color: var(--text-primary);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Touch-friendly scroll on overflow */
+/* Typography scale */
+h1, .text-display {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h2, .text-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h3, .text-subtitle {
+  font-weight: 600;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Section label (e.g. "Tournament Standings") */
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Touch-friendly scroll */
 .overflow-x-auto {
   -webkit-overflow-scrolling: touch;
+}
+
+/* Focus ring utility */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent);
+}
+
+/* Back / nav link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-height: 0;
+  padding: 0.5rem 0;
+  transition: color var(--transition-fast);
+}
+.back-link:hover {
+  color: var(--accent);
+}
+
+/* Live badge pulse */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow); }
+  50% { opacity: 0.95; box-shadow: 0 0 8px 2px var(--accent-glow); }
+}
+.animate-live-pulse {
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+/* Number inputs: hide spinners for cleaner stat entry */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

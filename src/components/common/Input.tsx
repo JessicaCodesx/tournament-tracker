@@ -10,16 +10,21 @@ export default function Input({ label, error, className = '', id, ...props }: In
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-[var(--text-muted)] mb-1">
+        <label
+          htmlFor={inputId}
+          className="section-label block mb-2 text-[var(--text-secondary)]"
+        >
           {label}
         </label>
       )}
       <input
         id={inputId}
-        className={`w-full min-h-[var(--touch-min)] px-4 py-3 text-base rounded-xl bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent ${className}`}
+        className={`w-full min-h-[var(--touch-min)] px-4 py-3 text-base rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] placeholder-[var(--text-muted)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)] ${className}`}
         {...props}
       />
-      {error && <p className="mt-1 text-sm text-red-400">{error}</p>}
+      {error && (
+        <p className="mt-1.5 text-sm text-amber-400/90">{error}</p>
+      )}
     </div>
   )
 }

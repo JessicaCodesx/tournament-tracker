@@ -21,20 +21,20 @@ export default function SpectatorDashboard({ tournament, className = '' }: Spect
   const total = tournament.matches.length
 
   return (
-    <div className={`space-y-6 ${className}`}>
-      <Card>
+    <div className={`space-y-5 ${className}`}>
+      <Card elevated>
         <ProgressBar current={completedCount} total={total} className="mb-4" />
-        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">Live Leaderboard</h2>
         <Leaderboard tournament={tournament} />
       </Card>
       {currentMatch && (
-        <Card>
-          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">Current Match</h2>
+        <Card elevated>
+          <p className="section-label text-[var(--text-secondary)] mb-1">Current match</p>
+          <h2 className="text-title text-base text-[var(--text-primary)] mb-3">Live</h2>
           <CurrentMatchDisplay tournament={tournament} match={currentMatch} />
         </Card>
       )}
       {completedCount > 0 && (
-        <Card>
+        <Card elevated>
           <PlayerStats tournament={tournament} />
         </Card>
       )}

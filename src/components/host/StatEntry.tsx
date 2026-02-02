@@ -1,20 +1,20 @@
 /**
- * Quick stat entry: select winner, enter K/D/Score per player, submit.
+ * Quick stat entry: select winner, enter stats per player.
+ * Scoreboard fields autopopulate by gamemode: S&D = K, D, Plants, Defuses; Hardpoint/Control = K, D, Score.
  */
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import Button from '../common/Button'
 import Card from '../common/Card'
-import type { Tournament, Match } from '../../types/tournament'
+import { getColumnsForMode, isSearchAndDestroy } from '../../utils/scoreboardColumns'
+import type { Tournament, Match, MatchStat } from '../../types/tournament'
+import type { StatFieldKey } from '../../utils/scoreboardColumns'
 
 interface StatEntryProps {
   tournament: Tournament
   match: Match
   matchIndex: number
   onBack: () => void
-  onSubmit: (
-    winner: 'team1' | 'team2' | 'team3',
-    stats: Record<string, { kills: number; deaths: number; score?: number }>
-  ) => void
+  onSubmit: (winner: 'team1' | 'team2' | 'team3', stats: Record<string, MatchStat>) => void
   submitting?: boolean
 }
 
@@ -22,6 +22,39 @@ function allPlayerIds(match: Match): string[] {
   const set = new Set([...match.team1, ...match.team2, ...(match.team3 ?? [])])
   return [...set]
 }
+
+/** Player IDs in display order: Team 1, then Team 2, then Team 3 (for 2v2v2). */
+function playerIdsByTeam(match: Match): string[] {
+  return [...match.team1, ...match.team2, ...(match.team3 ?? [])]
+}
+
+/** Team label for the first player of each team (others get null). */
+function getTeamLabelForPlayer(
+  match: Match,
+  playerId: string,
+  indexInOrder: number
+): string | null {
+  const t1Len = match.team1.length
+  const t2Len = match.team2.length
+  if (indexInOrder === 0) return 'Team 1'
+  if (indexInOrder === t1Len) return 'Team 2'
+  if (match.team3 && indexInOrder === t1Len + t2Len) return 'Team 3'
+  return null
+}
+
+/** Default stat for a mode: only the fields we collect for that mode (avoids showing wrong columns). */
+function getDefaultStatForMode(columns: { key: StatFieldKey }[]): MatchStat {
+  const stat: MatchStat = { kills: 0, deaths: 0 }
+  for (const col of columns) {
+    if (col.key === 'score') stat.score = 0
+    if (col.key === 'plants') stat.plants = 0
+    if (col.key === 'defuses') stat.defuses = 0
+  }
+  return stat
+}
+
+const inputClass =
+  'w-full min-w-12 min-h-[var(--touch-min)] px-3 py-2 text-base rounded-[var(--radius-sm)] bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)] transition-colors duration-[var(--transition-fast)]'
 
 export default function StatEntry({
   tournament,
@@ -32,28 +65,34 @@ export default function StatEntry({
   submitting,
 }: StatEntryProps) {
   const playerIds = allPlayerIds(match)
+  const playerIdsOrdered = playerIdsByTeam(match)
+  const columns = useMemo(() => getColumnsForMode(match.mode), [match.mode])
+  const defaultStat = useMemo(() => getDefaultStatForMode(columns), [columns])
   const [winner, setWinner] = useState<'team1' | 'team2' | 'team3' | null>(null)
-  const [stats, setStats] = useState<Record<string, { kills: number; deaths: number; score: number }>>(
-    () => Object.fromEntries(playerIds.map((id) => [id, { kills: 0, deaths: 0, score: 0 }]))
+  const [stats, setStats] = useState<Record<string, MatchStat>>(
+    () => Object.fromEntries(playerIds.map((id) => [id, { ...defaultStat }]))
   )
 
-  const updateStat = useCallback(
-    (playerId: string, field: 'kills' | 'deaths' | 'score', value: number) => {
-      setStats((prev: Record<string, { kills: number; deaths: number; score: number }>) => ({
-        ...prev,
-        [playerId]: { ...prev[playerId], [field]: value },
-      }))
-    },
-    []
-  )
+  const updateStat = useCallback((playerId: string, field: StatFieldKey, value: number) => {
+    setStats((prev) => ({
+      ...prev,
+      [playerId]: { ...prev[playerId], [field]: value },
+    }))
+  }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!winner) return
-    const out: Record<string, { kills: number; deaths: number; score?: number }> = {}
+    const isSnd = isSearchAndDestroy(match.mode)
+    const out: Record<string, MatchStat> = {}
     for (const id of playerIds) {
-      const s = stats[id] ?? { kills: 0, deaths: 0, score: 0 }
-      out[id] = { kills: s.kills, deaths: s.deaths, score: s.score || undefined }
+      const s = stats[id] ?? { ...defaultStat }
+      out[id] = {
+        kills: s.kills ?? 0,
+        deaths: s.deaths ?? 0,
+        ...(columns.some((c) => c.key === 'score') && { score: s.score ?? 0 }),
+        ...(isSnd && { plants: s.plants ?? 0, defuses: s.defuses ?? 0 }),
+      }
     }
     onSubmit(winner, out)
   }
@@ -63,10 +102,15 @@ export default function StatEntry({
   const team3Label = match.team3 ? 'Team 3' : null
 
   return (
-    <Card>
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Match Results</h2>
-      <p className="text-[var(--text-muted)] mb-4">Select winning team and enter stats.</p>
-      <div className="flex flex-wrap gap-2 mb-4">
+    <Card elevated>
+      <p className="section-label text-[var(--accent)] mb-1">Match results</p>
+      <h2 className="text-title text-xl text-[var(--text-primary)] mb-2">Enter stats</h2>
+      <p className="text-caption mb-4">
+        <span className="text-[var(--text-secondary)]">{match.mode}</span>
+        {' — '}Select the winning team and enter:{' '}
+        {columns.map((c) => c.label).join(', ')} for each player.
+      </p>
+      <div className="flex flex-wrap gap-2 mb-5">
         <Button
           variant={winner === 'team1' ? 'primary' : 'secondary'}
           onClick={() => setWinner('team1')}
@@ -89,54 +133,54 @@ export default function StatEntry({
         )}
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto -mx-1">
+        <div className="overflow-x-auto -mx-1 rounded-[var(--radius-md)] border border-[var(--border-subtle)] overflow-hidden min-w-0">
           <table className="w-full text-sm min-w-[280px]">
             <thead>
-              <tr className="border-b border-[var(--text-muted)]/30 text-[var(--text-muted)]">
-                <th className="py-2.5 pr-2 text-left">Player</th>
-                <th className="py-2.5 pr-2 text-left">K</th>
-                <th className="py-2.5 pr-2 text-left">D</th>
-                <th className="py-2.5 text-left">Score</th>
+              <tr className="border-b border-[var(--border-default)] bg-[var(--bg-elevated)]">
+                <th className="section-label py-3 px-3 text-left text-[var(--text-muted)]">Player</th>
+                {columns.map((col) => (
+                  <th key={col.key} className="section-label py-3 px-3 text-left text-[var(--text-muted)]">
+                    {col.label}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {playerIds.map((id) => {
+              {playerIdsOrdered.map((id, idx) => {
+                const teamLabel = getTeamLabelForPlayer(match, id, idx)
                 const player = tournament.players.find((p) => p.id === id)
-                const s = stats[id] ?? { kills: 0, deaths: 0, score: 0 }
-                const inputClass = 'w-full min-w-12 min-h-[var(--touch-min)] px-2 py-2 text-base rounded-lg bg-[var(--bg-primary)] border border-[var(--text-muted)]/30 text-[var(--text-primary)]'
+                const s = stats[id] ?? { ...defaultStat }
                 return (
-                  <tr key={id} className="border-b border-[var(--text-muted)]/10">
-                    <td className="py-2 pr-2 font-medium">{player?.name ?? id}</td>
-                    <td className="py-2 pr-2">
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        min={0}
-                        className={inputClass}
-                        value={s.kills}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateStat(id, 'kills', parseInt(e.target.value, 10) || 0)}
-                      />
+                  <tr
+                    key={id}
+                    className="border-b border-[var(--border-subtle)] last:border-0 hover:bg-[var(--bg-card-hover)] transition-colors duration-[var(--transition-fast)]"
+                  >
+                    <td className="py-2.5 px-3 font-medium text-[var(--text-primary)]">
+                      {teamLabel != null ? (
+                        <span className="block">
+                          <span className="text-[var(--text-muted)] text-xs font-medium uppercase tracking-wide">
+                            {teamLabel}
+                          </span>
+                          <span className="text-[var(--text-primary)]">{player?.name ?? id}</span>
+                        </span>
+                      ) : (
+                        player?.name ?? id
+                      )}
                     </td>
-                    <td className="py-2 pr-2">
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        min={0}
-                        className={inputClass}
-                        value={s.deaths}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateStat(id, 'deaths', parseInt(e.target.value, 10) || 0)}
-                      />
-                    </td>
-                    <td className="py-2">
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        min={0}
-                        className={inputClass}
-                        value={s.score}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateStat(id, 'score', parseInt(e.target.value, 10) || 0)}
-                      />
-                    </td>
+                    {columns.map((col) => (
+                      <td key={col.key} className="py-2.5 px-3">
+                        <input
+                          type="number"
+                          inputMode="numeric"
+                          min={0}
+                          className={inputClass}
+                          value={Number(s[col.key as keyof MatchStat]) || 0}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            updateStat(id, col.key, parseInt(e.target.value, 10) || 0)
+                          }
+                        />
+                      </td>
+                    ))}
                   </tr>
                 )
               })}
