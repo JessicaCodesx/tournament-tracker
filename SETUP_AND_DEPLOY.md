@@ -54,6 +54,33 @@ Do this once to get your app live so you can test on your phone.
 
 ---
 
+## Deploy from main (GitHub Actions)
+
+To have the site **deploy automatically when you push to main** (no need to run `npm run deploy` locally):
+
+1. **Add Firebase config as repo secrets**
+   - On GitHub: repo → **Settings** → **Secrets and variables** → **Actions**.
+   - Click **New repository secret** for each of these (use the same values as in your local `.env`):
+     - `VITE_FIREBASE_API_KEY`
+     - `VITE_FIREBASE_AUTH_DOMAIN`
+     - `VITE_FIREBASE_DATABASE_URL`
+     - `VITE_FIREBASE_PROJECT_ID`
+     - `VITE_FIREBASE_STORAGE_BUCKET`
+     - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+     - `VITE_FIREBASE_APP_ID`
+
+2. **Switch Pages to GitHub Actions**
+   - Repo → **Settings** → **Pages**.
+   - Under **Build and deployment**, **Source**: choose **GitHub Actions** (not “Deploy from a branch”).
+
+3. **Push to main**
+   - Push your code (including the `.github/workflows/deploy-pages.yml` file) to `main`.
+   - The workflow runs: it builds using the secrets and deploys to Pages. The site updates in a few minutes.
+
+After this, every **push to main** triggers a new deploy. You can also run the workflow manually from the **Actions** tab → **Deploy to GitHub Pages** → **Run workflow**.
+
+---
+
 ## Prerequisites
 
 - **Node.js** 18+ ([nodejs.org](https://nodejs.org))
