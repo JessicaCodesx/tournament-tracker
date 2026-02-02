@@ -6,7 +6,7 @@ import Bracket from './Bracket'
 import Modal from '../common/Modal'
 import PlayerStatsModalContent from './PlayerStatsModalContent'
 import MatchDetailModalContent from './MatchDetailModalContent'
-import { getCurrentMatchIndex } from '../../utils/tournamentHelpers'
+import { getCurrentMatchIndex, getWinStreak } from '../../utils/tournamentHelpers'
 import type { Tournament, Match } from '../../types/tournament'
 
 interface BracketViewProps {
@@ -51,6 +51,9 @@ export default function BracketView({
                   className="w-full text-left px-3 py-2.5 rounded-[var(--radius-sm)] text-sm font-medium text-[var(--text-primary)] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)] transition-colors duration-[var(--transition-fast)]"
                 >
                   {p.name}
+                  {getWinStreak(tournament, p.id) >= 3 && (
+                    <span className="ml-1" aria-hidden>🔥</span>
+                  )}
                 </button>
               </li>
             ))}

@@ -1,7 +1,9 @@
 /**
  * Final tournament summary: champion, standings, player stats, share link.
+ * Shows 🔥 next to name when player is on a 3+ win streak.
  */
 import PlayerStats from './PlayerStats'
+import { getWinStreak } from '../../utils/tournamentHelpers'
 import type { Tournament, LeaderboardEntry } from '../../types/tournament'
 
 interface TournamentSummaryProps {
@@ -41,6 +43,9 @@ export default function TournamentSummary({ tournament, className = '' }: Tourna
             >
               <span className="font-medium text-[var(--text-primary)]">
                 {i + 1}. {player.name}
+                {getWinStreak(tournament, player.id) >= 3 && (
+                  <span className="ml-1" aria-hidden>🔥</span>
+                )}
               </span>
               <span className="text-[var(--text-secondary)]">{entry.wins} wins</span>
             </li>

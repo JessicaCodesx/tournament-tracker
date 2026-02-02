@@ -1,7 +1,9 @@
 /**
  * Live standings table: rank, player, wins, losses, W%, avg K/D. Based on games entered.
+ * Shows 🔥 next to name when player is on a 3+ win streak.
  */
 import type { Tournament, LeaderboardEntry } from '../../types/tournament'
+import { getWinStreak } from '../../utils/tournamentHelpers'
 
 interface LeaderboardProps {
   tournament: Tournament
@@ -61,7 +63,12 @@ export default function Leaderboard({ tournament, className = '' }: LeaderboardP
                 }`}
               >
                 <td className="py-3 pr-3 font-semibold text-[var(--text-secondary)]">{i + 1}</td>
-                <td className="py-3 pr-3 font-medium text-[var(--text-primary)]">{player.name}</td>
+                <td className="py-3 pr-3 font-medium text-[var(--text-primary)]">
+                  {player.name}
+                  {getWinStreak(tournament, player.id) >= 3 && (
+                    <span className="ml-1" aria-label="3+ win streak">🔥</span>
+                  )}
+                </td>
                 <td className="py-3 pr-3 text-[var(--text-secondary)]">{entry.wins}</td>
                 <td className="py-3 pr-3 text-[var(--text-secondary)]">{entry.losses}</td>
                 <td className="py-3 pr-3 text-[var(--text-secondary)]">{entry.gamesPlayed}</td>
