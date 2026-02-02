@@ -29,11 +29,7 @@ function playerIdsByTeam(match: Match): string[] {
 }
 
 /** Team label for the first player of each team (others get null). */
-function getTeamLabelForPlayer(
-  match: Match,
-  playerId: string,
-  indexInOrder: number
-): string | null {
+function getTeamLabelForPlayer(match: Match, indexInOrder: number): string | null {
   const t1Len = match.team1.length
   const t2Len = match.team2.length
   if (indexInOrder === 0) return 'Team 1'
@@ -147,7 +143,7 @@ export default function StatEntry({
             </thead>
             <tbody>
               {playerIdsOrdered.map((id, idx) => {
-                const teamLabel = getTeamLabelForPlayer(match, id, idx)
+                const teamLabel = getTeamLabelForPlayer(match, idx)
                 const player = tournament.players.find((p) => p.id === id)
                 const s = stats[id] ?? { ...defaultStat }
                 return (
