@@ -268,6 +268,16 @@ Open the URL shown (e.g. `http://localhost:4173/tournament-tracker/`). Links and
 
 ## Troubleshooting
 
+- **`npm run deploy` — nothing happens / site not updating**
+  1. **Run the steps separately** so you can see where it fails:
+     - `npm run build` — does the build finish without errors? (If it fails, fix that first; e.g. missing `.env` or TypeScript errors.)
+     - `npx gh-pages -d dist` — does it push? You may be prompted for GitHub username and password (use a **Personal Access Token** as the password if you use 2FA).
+  2. **Check GitHub Pages source:** Repo → **Settings** → **Pages** → **Source** must be **Deploy from a branch**, **Branch** = `gh-pages`, **Folder** = `/ (root)`.
+  3. **Open the correct URL:** `https://YOUR_USERNAME.github.io/tournament-tracker/` (trailing slash and repo name matter). Try a hard refresh (Ctrl+Shift+R) or another browser/incognito.
+  4. **Optional — force the repo:** If push seems to go nowhere, try:  
+     `npx gh-pages -d dist -r https://github.com/YOUR_USERNAME/tournament-tracker.git`  
+     (Replace YOUR_USERNAME and repo name. You may be prompted for credentials.)
+
 - **Blank page after deploy**  
   - Check that the base path in `vite.config.ts` (or `VITE_BASE_PATH`) matches your repo name and has a leading and trailing slash, e.g. `/tournament-tracker/`.
   - Open the browser console (F12) and look for 404s on JS/CSS — that usually means the base path is wrong.
@@ -289,4 +299,29 @@ Open the URL shown (e.g. `http://localhost:4173/tournament-tracker/`). Links and
   - If you use 2FA, use a **Personal Access Token** as the password when `gh-pages` (or Git) prompts you.
   - You can also use GitHub Actions to build and deploy so secrets stay in the repo and you don’t deploy from your machine.
 
-If you want, we can add a GitHub Actions workflow next so every push to `main` builds and deploys automatically.
+---
+
+## Deploy to Vercel (alternative to GitHub Pages)
+
+1. Go to [vercel.com](https://vercel.com) and sign in with **GitHub**.
+2. Click **Add New…** → **Project**.
+3. **Import** your repo: `JessicaCodesx/tournament-tracker` (or select it from the list). Click **Import**.
+4. **Configure Project:**
+   - **Framework Preset:** Vite (or leave as detected).
+   - **Build Command:** `npm run build` (default).
+   - **Output Directory:** `dist` (default).
+   - **Root Directory:** leave blank.
+5. **Environment Variables:** Click **Environment Variables** and add each (same as your `.env`):
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_DATABASE_URL`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+   - `VITE_BASE_PATH` = `/` (so the app works at the root of your Vercel URL)
+   Apply to **Production** (and Preview if you want).
+6. Click **Deploy**. Wait 1–2 minutes.
+7. Your site is live at `https://your-project-name.vercel.app`. Every push to `main` will auto-deploy.
+
+The repo includes `vercel.json` so routes like `/host`, `/watch`, `/compare` work correctly (SPA rewrites).
