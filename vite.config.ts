@@ -4,8 +4,12 @@ import tailwindcss from '@tailwindcss/vite'
 import { copyFileSync, existsSync } from 'fs'
 import { join } from 'path'
 
-/** Base path for GitHub Pages (production only). Use '/' for username.github.io; use '/repo-name/' for project pages. */
-const base = process.env.NODE_ENV === 'production' ? (process.env.VITE_BASE_PATH ?? '/tournament-tracker/') : '/'
+/** Base path: '/' on Vercel (VERCEL=1), else VITE_BASE_PATH or GitHub Pages default. */
+const base = process.env.VERCEL
+  ? '/'
+  : process.env.NODE_ENV === 'production'
+    ? (process.env.VITE_BASE_PATH ?? '/tournament-tracker/')
+    : '/'
 
 export default defineConfig({
   base,
